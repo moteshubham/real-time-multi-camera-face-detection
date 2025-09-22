@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15            # Use official Postgres v15 image
+    container_name: postgres-db   # Name of the container
+    restart: always               # Restart automatically if it crashes
+    environment:
+      POSTGRES_USER: admin        # Username for the database
+      POSTGRES_PASSWORD: admin123 # Password for the database
+      POSTGRES_DB: facedb         # Default database to create
+    ports:
+      - "5432:5432"               # Expose Postgres on localhost:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Persist data in Docker volume
+
+volumes:
+  pgdata:                         # Named volume to store DB files
