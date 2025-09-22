@@ -13,3 +13,31 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User model: For login/authentication
+model User {
+  id        Int      @id @default(autoincrement()) // Primary key
+  username  String   @unique                       // Unique username
+  password  String                                // Hashed password
+  createdAt DateTime @default(now())               // Timestamp
+  updatedAt DateTime @updatedAt                    // Auto-updated on change
+}
+
+// Camera model: Stores RTSP camera info
+model Camera {
+  id        Int      @id @default(autoincrement()) // Primary key
+  name      String                                 // Camera name
+  rtspUrl   String                                 // RTSP stream URL
+  location  String?                                // Optional location
+  createdAt DateTime @default(now())               // Timestamp
+  alerts    Alert[]                                // Relation: One camera has many alerts
+}
+
+// Alert model: Stores face detection events
+model Alert {
+  id        Int      @id @default(autoincrement()) // Primary key
+  timestamp DateTime @default(now())               // When face detected
+  snapshot  String?                                // Path/URL to snapshot
+  camera    Camera   @relation(fields: [cameraId], references: [id]) // Link to camera
+  cameraId  Int
+}
